@@ -61,5 +61,10 @@ CREATE TABLE COMPRAS (
 	modelo int,
 	fecha date,
 	unidades tinyInt,
+	Constraint PK_COMPRAS Primary Key (dni)
+)
 
+CREATE TABLE TRAJES (
+	modelo int,
+	Constraint PK_TRAJES Primary Key (modelo)
 )
