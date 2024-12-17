@@ -139,3 +139,28 @@ CREATE TABLE COCHES_COCHERAS (
 	Constraint FK_CochesCocheras_Cocheras_idCochera Foreign Key (idCochera) References COCHERAS (id),
 	Constraint UQ_COCHES_COCHERAS Unique (idCochera)
 )
+
+/* BASE DE DATOS EJERCICIO 9 */
+CREATE DATABASE Ej9
+GO
+USE Ej9
+GO
+
+CREATE TABLE AULAS (
+	numero Int,
+	Constraint PK_AULAS Primary Key (numero)
+)
+
+CREATE TABLE ORDENADORES (
+	id Int,
+	aula Int,
+	Constraint PK_ORDENADORES Primary Key (id),
+	Constraint FK_Ordenadores_Aulas_aula Foreign Key (aula) References AULAS (numero)
+)
+
+CREATE TABLE ALUMNOS (
+	dni Int,
+	ordenador Int,
+	Constraint PK_ALUMNOS Primary Key (dni),
+	Constraint FK_Alumnos_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id)
+)
