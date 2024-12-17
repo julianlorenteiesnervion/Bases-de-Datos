@@ -17,8 +17,8 @@ CREATE TABLE Departamentos (
 CREATE TABLE Deptos_Empleados (
 	DNI_EMPLEADO tinyInt,
 	NUM_DPTO int,
-	Constraint FK_DNI_EMPLEADO FOREIGN KEY (DNI_EMPLEADO) REFERENCES Empleados (DNI),
-	Constraint FK_NUM_DPTO FOREIGN KEY (NUM_DPTO) REFERENCES Departamentos (NUMDPTO)
+	Constraint FK_DeptosEmpleados_Empleados_dniEmpleado FOREIGN KEY (DNI_EMPLEADO) REFERENCES Empleados (DNI),
+	Constraint FK_DeptosEmpleados_Departamentos_numDpto FOREIGN KEY (NUM_DPTO) REFERENCES Departamentos (NUMDPTO)
 )
 
 /* BASE DE DATOS EJERCICIO 3 */
@@ -41,8 +41,8 @@ CREATE TABLE PARTIDOS (
 CREATE TABLE PARTIDOS_JUGADORES (
 	id int,
 	dni tinyInt,
-	CONSTRAINT FK_ID_PARTIDOS_JUGADORES FOREIGN KEY (id) REFERENCES PARTIDOS (id),
-	CONSTRAINT FK_DNI_PARTIDOS_JUGADORES FOREIGN KEY (dni) REFERENCES FUTBOLISTAS (dni)
+	CONSTRAINT FK_PartidosJugadores_Partidos_id FOREIGN KEY (id) REFERENCES PARTIDOS (id),
+	CONSTRAINT FK_PartidosJugadores_Futbolistas_dni FOREIGN KEY (dni) REFERENCES FUTBOLISTAS (dni)
 )
 
 /* BASE DE DATOS EJERCICIO 4 */
@@ -67,8 +67,8 @@ CREATE TABLE COMPRAS (
 	fecha Date,
 	unidades TinyInt,
 	Constraint PK_COMPRAS Primary Key (dni, modelo, fecha),
-	Constraint FK_DNI_CLIENTES Foreign Key (dni) References CLIENTES (dni),
-	Constraint FK_MODELO_TRAJES Foreign Key (modelo) References TRAJES (modelo)
+	Constraint FK_Compras_Clientes_dni Foreign Key (dni) References CLIENTES (dni),
+	Constraint FK_Compras_Trajes_modelo Foreign Key (modelo) References TRAJES (modelo)
 )
 
 /* BASE DE DATOS EJERCICIO 5 */
@@ -87,7 +87,7 @@ CREATE TABLE COCHES (
 	color varchar(10),
 	dueno Int,
 	Constraint PK_COCHES Primary Key (matricula),
-	Constraint FK_PERSONAS Foreign Key (dueno) References PERSONAS (dni)
+	Constraint FK_Coches_Personas_dueno Foreign Key (dueno) References PERSONAS (dni)
 )
 
 /* BASE DE DATOS EJERCICIO 6 */
@@ -112,6 +112,26 @@ CREATE TABLE POSEEDORES (
 	matricula Int,
 	fecha Date,
 	Constraint PK_POSEEDORES Primary Key (dni, matricula, fecha),
-	Constraint FK_PERSONAS Foreign Key (dni) References PERSONAS (dni),
-	Constraint FK_COCHES Foreign Key (matricula) References COCHES (matricula)
+	Constraint FK_Poseedores_Personas_dni Foreign Key (dni) References PERSONAS (dni),
+	Constraint FK_Poseedores_Coches_matricula Foreign Key (matricula) References COCHES (matricula)
+)
+
+/* BASE DE DATOS EJERCICIO 8 */
+CREATE DATABASE Ej8
+GO
+USE Ej8
+GO
+
+CREATE TABLE COCHES (
+	matricula Int,
+	cochera Int,
+	Constraint PK_COCHES Primary Key (matricula)
+)
+
+CREATE TABLE COCHERAS (
+	id Int,
+	coche Int,
+	Constraint PK_COCHERAS Primary Key (id),
+	Constraint FK_COCHERA_COCHES Foreign Key (id) References COCHES (cochera),
+	Constraint FK_MATRICULA_COCHES Foreign Key (coche) References COCHES (matricula)
 )
