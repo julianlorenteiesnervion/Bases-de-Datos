@@ -52,19 +52,21 @@ USE Ej4
 GO
 
 CREATE TABLE CLIENTES (
-	dni tinyInt,
+	dni Int,
 	Constraint PK_CLIENTES Primary Key (dni)
 )
 
-CREATE TABLE COMPRAS (
-	dni tinyInt,
-	modelo int,
-	fecha date,
-	unidades tinyInt,
-	Constraint PK_COMPRAS Primary Key (dni)
+CREATE TABLE TRAJES (
+	modelo Varchar(10),
+	Constraint PK_TRAJES Primary Key (modelo)
 )
 
-CREATE TABLE TRAJES (
-	modelo int,
-	Constraint PK_TRAJES Primary Key (modelo)
+CREATE TABLE COMPRAS (
+	dni Int,
+	modelo Varchar(10),
+	fecha Date,
+	unidades TinyInt,
+	Constraint PK_COMPRAS Primary Key (dni, modelo, fecha),
+	Constraint FK_DNI_CLIENTES Foreign Key (dni) References CLIENTES (dni),
+	Constraint FK_MODELO_TRAJES Foreign Key (modelo) References TRAJES (modelo)
 )
