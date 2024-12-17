@@ -282,3 +282,29 @@ CREATE TABLE PASA (
 	Constraint FK_Pasa_Lineas_linea Foreign Key (linea) References LINEAS (numero),
 	Constraint FK_Pasa_Calles_calle Foreign Key (calle) References CALLES (nombre)
 )
+
+/* BASE DE DATOS EJERCICIO 13 */
+CREATE DATABASE Ej13
+GO
+USE Ej13
+GO
+
+CREATE TABLE EDIFICIOS (
+	nombre Varchar(50),
+	direccion Varchar(100),
+	Constraint PK_EDIFICIOS Primary Key (nombre)
+)
+
+CREATE TABLE EMPRESAS (
+	cif Int,
+	nombre Varchar(50),
+	Constraint PK_EMPRESAS Primary Key (cif)
+)
+
+CREATE TABLE OFICINAS (
+	edificio Varchar(50),
+	numero Int,
+	empresa Int,
+	Constraint FK_Oficinas_Edificios_edificio Foreign Key (edificio) References EDIFICIOS (nombre),
+	Constraint FK_Oficinas_Empresas_empresa Foreign Key (empresa) References EMPRESAS (cif)
+)
