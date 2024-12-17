@@ -164,3 +164,42 @@ CREATE TABLE ALUMNOS (
 	Constraint PK_ALUMNOS Primary Key (dni),
 	Constraint FK_Alumnos_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id)
 )
+
+/* BASE DE DATOS EJERCICIO 10 */
+CREATE DATABASE Ej10
+GO
+USE Ej10
+GO
+
+CREATE TABLE ALUMNOS (
+	dni Int,
+	Constraint PK_ALUMNOS Primary Key (dni)
+)
+
+CREATE TABLE ORDENADORES (
+	id Int,
+	Constraint PK_ORDENADORES Primary Key (id)
+)
+
+CREATE TABLE AULAS (
+	numero Int,
+	Constraint PK_AULAS Primary Key (numero)
+)
+
+CREATE TABLE UTILIZA (
+	dni Int,
+	ordenador Int,
+	curso Int,
+	Constraint PK_UTILIZA Primary Key (dni, ordenador, curso),
+	Constraint FK_Utiliza_Alumnos_dni Foreign Key (dni) References ALUMNOS (dni),
+	Constraint FK_Utiliza_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id)
+)
+
+CREATE TABLE ESTA (
+	ordenador Int,
+	aula Int,
+	curso Int,
+	Constraint PK_ESTA Primary Key (ordenador, aula, curso),
+	Constraint FK_Esta_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id),
+	Constraint FK_Esta_Aulas_aula Foreign Key (aula) References AULAS (numero)
+)
