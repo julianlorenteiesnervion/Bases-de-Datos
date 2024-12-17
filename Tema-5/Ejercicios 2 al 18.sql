@@ -70,3 +70,22 @@ CREATE TABLE COMPRAS (
 	Constraint FK_DNI_CLIENTES Foreign Key (dni) References CLIENTES (dni),
 	Constraint FK_MODELO_TRAJES Foreign Key (modelo) References TRAJES (modelo)
 )
+
+/* BASE DE DATOS EJERCICIO 5 */
+CREATE DATABASE Ej5
+GO
+USE Ej5
+GO
+
+CREATE TABLE PERSONAS (
+	dni Int,
+	Constraint PK_PERSONAS Primary Key (dni)
+)
+
+CREATE TABLE COCHES (
+	matricula Int,
+	color varchar(10),
+	dueno Int,
+	Constraint PK_COCHES Primary Key (matricula),
+	Constraint FK_PERSONAS Foreign Key (dueno) References PERSONAS (dni)
+)
