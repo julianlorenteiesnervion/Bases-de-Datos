@@ -332,3 +332,12 @@ CREATE TABLE OFICINAS (
 	Constraint PK_OFICINAS Primary Key (edificio, numero),
 	Constraint FK_Oficinas_Edificios_edificio Foreign Key (edificio) References EDIFICIOS (nombre)
 )
+
+CREATE TABLE EMPLEADOS_OFICINISTAS (
+	dni Int,
+	nombre Varchar(30),
+	sueldo Int,
+	titulacion Varchar(100),
+	edificio Varchar(50),
+	oficina
+)
