@@ -124,14 +124,18 @@ GO
 
 CREATE TABLE COCHES (
 	matricula Int,
-	cochera Int,
 	Constraint PK_COCHES Primary Key (matricula)
 )
 
 CREATE TABLE COCHERAS (
 	id Int,
-	coche Int,
 	Constraint PK_COCHERAS Primary Key (id),
-	Constraint FK_COCHERA_COCHES Foreign Key (id) References COCHES (cochera),
-	Constraint FK_MATRICULA_COCHES Foreign Key (coche) References COCHES (matricula)
+)
+
+CREATE TABLE COCHES_COCHERAS (
+	matricula Int,
+	idCochera Int Not Null,
+	Constraint PK_COCHES_COCHERAS Primary Key (matricula),
+	Constraint FK_CochesCocheras_Cocheras_idCochera Foreign Key (idCochera) References COCHERAS (id),
+	Constraint UQ_COCHES_COCHERAS Unique (idCochera)
 )
