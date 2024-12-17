@@ -308,3 +308,27 @@ CREATE TABLE OFICINAS (
 	Constraint FK_Oficinas_Edificios_edificio Foreign Key (edificio) References EDIFICIOS (nombre),
 	Constraint FK_Oficinas_Empresas_empresa Foreign Key (empresa) References EMPRESAS (cif)
 )
+
+/* BASE DE DATOS EJERCICIO 14 */
+CREATE DATABASE Ej14
+GO
+USE Ej14
+GO
+
+CREATE TABLE EDIFICIOS (
+	nombre Varchar(50),
+	direccion Varchar(100),
+	Constraint PK_EDIFICIOS Primary Key (nombre)
+)
+
+CREATE TABLE OBRAS (
+	id Int,
+	Constraint PK_OBRAS Primary Key (id)
+)
+
+CREATE TABLE OFICINAS (
+	edificio Varchar(50),
+	numero Int,
+	Constraint PK_OFICINAS Primary Key (edificio, numero),
+	Constraint FK_Oficinas_Edificios_edificio Foreign Key (edificio) References EDIFICIOS (nombre)
+)
