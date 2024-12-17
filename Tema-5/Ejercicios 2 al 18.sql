@@ -203,3 +203,35 @@ CREATE TABLE ESTA (
 	Constraint FK_Esta_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id),
 	Constraint FK_Esta_Aulas_aula Foreign Key (aula) References AULAS (numero)
 )
+
+/* BASE DE DATOS EJERCICIO 11 */
+CREATE DATABASE Ej11
+GO
+USE Ej11
+GO
+
+CREATE TABLE ALUMNOS (
+	dni Int,
+	Constraint PK_ALUMNOS Primary Key (dni)
+)
+
+CREATE TABLE ORDENADORES (
+	id Int,
+	Constraint PK_ORDENADORES Primary Key (id)
+)
+
+CREATE TABLE APLICACIONES (
+	titulo Varchar(30),
+	Constraint PK_APLICACIONES Primary Key (titulo)
+)
+
+CREATE TABLE UTILIZA (
+	alumno Int,
+	ordenador Int,
+	aplicacion Varchar(30),
+	tiempo Time,
+	Constraint PK_UTILIZA Primary Key (alumno, aplicacion),
+	Constraint FK_Utiliza_Alumnos_alumno Foreign Key (alumno) References ALUMNOS (dni),
+	Constraint FK_Utiliza_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id),
+	Constraint FK_Utiliza_Aplicaciones_aplicacion Foreign Key (aplicacion) References APLICACIONES (titulo)
+)
