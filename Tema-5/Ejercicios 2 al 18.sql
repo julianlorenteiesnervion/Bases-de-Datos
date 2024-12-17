@@ -89,3 +89,29 @@ CREATE TABLE COCHES (
 	Constraint PK_COCHES Primary Key (matricula),
 	Constraint FK_PERSONAS Foreign Key (dueno) References PERSONAS (dni)
 )
+
+/* BASE DE DATOS EJERCICIO 6 */
+CREATE DATABASE Ej6
+GO
+USE Ej6
+GO
+
+CREATE TABLE PERSONAS (
+	dni Int,
+	Constraint PK_PERSONAS Primary Key (dni)
+)
+
+CREATE TABLE COCHES (
+	matricula Int,
+	color Varchar(10),
+	Constraint PK_COCHES Primary Key (matricula)
+)
+
+CREATE TABLE POSEEDORES (
+	dni Int,
+	matricula Int,
+	fecha Date,
+	Constraint PK_POSEEDORES Primary Key (dni, matricula, fecha),
+	Constraint FK_PERSONAS Foreign Key (dni) References PERSONAS (dni),
+	Constraint FK_COCHES Foreign Key (matricula) References COCHES (matricula)
+)
