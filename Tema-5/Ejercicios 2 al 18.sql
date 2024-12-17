@@ -235,3 +235,39 @@ CREATE TABLE UTILIZA (
 	Constraint FK_Utiliza_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id),
 	Constraint FK_Utiliza_Aplicaciones_aplicacion Foreign Key (aplicacion) References APLICACIONES (titulo)
 )
+
+/* BASE DE DATOS EJERCICIO 12 */
+CREATE DATABASE Ej12
+GO
+USE Ej12
+GO
+
+CREATE TABLE AUTOBUSES (
+	matricula Int,
+	Constraint PK_AUTOBUSES Primary Key (matricula)
+)
+
+CREATE TABLE LINEAS (
+	numero Int,
+	Constraint PK_LINEAS Primary Key (numero)
+)
+
+CREATE TABLE CALLES (
+	nombre Varchar(100),
+	Constraint PK_CALLES Primary Key (nombre)
+)
+
+CREATE TABLE CONDUCTORES (
+	dni Int,
+	calle Varchar(100),
+	Constraint FK_Conductores_Calles_calle Foreign Key (calle) References CALLES (nombre)
+)
+
+CREATE TABLE UTILIZA (
+	conductor Int,
+	autobus Int,
+	linea Int,
+	dia Date,
+	Constraint PK_UTILIZA Primary Key (conductor, autobus, dia),
+	Constraint FK_Utiliza_Conductores_conductor Foreign Key (conductor) References CONDUCTORES (dni)
+)
