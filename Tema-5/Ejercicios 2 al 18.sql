@@ -260,6 +260,7 @@ CREATE TABLE CALLES (
 CREATE TABLE CONDUCTORES (
 	dni Int,
 	calle Varchar(100),
+	Constraint PK_CONDUCTORES Primary Key (dni),
 	Constraint FK_Conductores_Calles_calle Foreign Key (calle) References CALLES (nombre)
 )
 
@@ -269,5 +270,15 @@ CREATE TABLE UTILIZA (
 	linea Int,
 	dia Date,
 	Constraint PK_UTILIZA Primary Key (conductor, autobus, dia),
-	Constraint FK_Utiliza_Conductores_conductor Foreign Key (conductor) References CONDUCTORES (dni)
+	Constraint FK_Utiliza_Conductores_conductor Foreign Key (conductor) References CONDUCTORES (dni),
+	Constraint FK_Utiliza_Autobuses_autobus Foreign Key (autobus) References AUTOBUSES (matricula),
+	Constraint FK_Utiliza_Lineas_linea Foreign Key (linea) References LINEAS (numero)
+)
+
+CREATE TABLE PASA (
+	linea Int,
+	calle Varchar(100),
+	Constraint PK_PASA Primary Key (linea, calle),
+	Constraint FK_Pasa_Lineas_linea Foreign Key (linea) References LINEAS (numero),
+	Constraint FK_Pasa_Calles_calle Foreign Key (calle) References CALLES (nombre)
 )
