@@ -357,3 +357,107 @@ CREATE TABLE EMPLEADOS_OBREROS (
 	Constraint FK_EmpleadosObreros_Obras_obra Foreign Key (obra) References OBRAS (id),
 	Constraint FK_EmpleadosObreros_EmpleadosObreros_jefe Foreign Key (jefe) References EMPLEADOS_OBREROS (dni)
 )
+
+/* BASE DE DATOS EJERCICIO 15 */
+CREATE DATABASE Ej15
+GO
+USE Ej15
+GO
+
+CREATE TABLE ASIGNATURAS (
+	codAsig Int,
+	Constraint PK_ASIGNATURAS Primary Key (codAsig)
+)
+
+CREATE TABLE ESTUDIOS (
+	codEstud Int,
+	Constraint PK_ESTUDIOS Primary Key (codEstud)
+)
+
+CREATE TABLE GRUPOS (
+	codGrupo Int,
+	Constraint PK_GRUPOS Primary Key (codGrupo)
+)
+
+CREATE TABLE TUTORESLEGALES (
+	dni Int,
+	Constraint PK_TUTORESLEGALES Primary Key (dni)
+)
+
+CREATE TABLE ASIGNATURASESTUDIOS (
+	codAsig Int,
+	codEstud Int,
+	Constraint PK_ASIGNATURASESTUDIOS Primary Key (codAsig, codEstud),
+	Constraint FK_ASIGNATURASESTUDIOS_ASIGNATURAS_codAsig Foreign Key (codAsig) References ASIGNATURAS (codAsig),
+	Constraint FK_ASIGNATURASESTUDIOS_ESTUDIOS_codEstud Foreign Key (codEstud) References ESTUDIOS (codEstud)
+)
+
+CREATE TABLE FICHAS (
+	numReg Int,
+	codAsig Int,
+	curso Int,
+	junio Int,
+	septiembre Int,
+	Constraint PK_FICHAS Primary Key (numReg, codAsig, curso),
+	Constraint FK_FICHAS_EXPEDIENTES_numReg Foreign Key (numReg) References EXPEDIENTES (numReg),
+	Constraint FK_FICHAS_ASIGNATURAS_codAsig Foreign Key (codAsig) References ASIGNATURAS (codAsig)
+)
+
+CREATE TABLE PROFESORES (
+	nrp Int,
+	horaAlumn Time,
+	horaPadres Time,
+	seminario Int,
+	Constraint PK_PROFESORES Primary Key (nrp),
+	Constraint FK_PROFESORES_SEMINARIOS_seminario Foreign Key (seminario) References SEMINARIOS (codSemin)
+)
+
+CREATE TABLE IMPARTE (
+	asignatura Int,
+	profesor Int,
+	grupo Int,
+	Constraint PK_IMPARTE Primary Key (asignatura, profesor, grupo),
+	Constraint FK_IMPARTE_ASIGNATURAS_asignatura Foreign Key (asignatura) References ASIGNATURAS (codAsig),
+	Constraint FK_IMPARTE_PROFESORES_profesor Foreign Key (profesor) References PROFESORES (nrp),
+	Constraint FK_IMPARTE_GRUPOS_grupo Foreign Key (grupo) References GRUPOS (codGrupo)
+)
+
+CREATE TABLE TUTORIAS (
+	profesor Int,
+	alumno Int,
+	fecha date,
+	Constraint PK_TUTORIAS Primary Key (profesor, alumno, fecha),
+	Constraint FK_TUTORIAS_PROFESOR_profesor Foreign Key (profesor) References PROFESORES (nrp),
+	Constraint FK_TUTORIAS_ALUMNOS_alumno Foreign Key (alumno) References ALUMNOS (dni),
+)
+
+CREATE TABLE SEMINARIOS (
+	codSemin Int,
+	jefe Int,
+	Constraint PK_SEMINARIOS Primary Key (codSemin),
+	Constraint FK_SEMINARIOS_PROFESORES_jefe Foreign Key (jefe) References PROFESORES (nrp)
+)
+
+CREATE TABLE ALUMNOS (
+	dni Int,
+	codEstudio Int,
+	expediente Int,
+	grupo Int,
+	Constraint PK_ALUMNOS Primary Key (dni),
+	Constraint FK_ALUMNOS_EXPEDIENTES_expediente Foreign Key (expediente) References EXPEDIENTES (numReg)
+)
+
+CREATE TABLE EXPEDIENTES (
+	numReg Int,
+	alumno Int,
+	Constraint PK_EXPEDIENTES Primary Key (numReg),
+	Constraint FK_EXPEDIENTES_ESTUDIOS_alumno Foreign Key (alumno) References ALUMNOS (dni)
+)
+
+CREATE TABLE ALUMNO_TUTOR_LEGAL (
+	dniAlumn Int,
+	dniTutor Int,
+	Constraint PK_ALUMNOTUTORLEGAL Primary Key (dniAlumn, dniTutor),
+	Constraint FK_ALUMNOTUTORLEGAL_ALUMNOS_dniAlumn Foreign Key (dniAlumn) References ALUMNOS (dni),
+	Constraint FK_ALUMNOTUTORLEGAL_TUTORESLEGALES_dniTutor Foreign Key (dniTutor) References TUTORESLEGALES (dni)
+)
