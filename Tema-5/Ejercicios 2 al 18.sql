@@ -525,3 +525,46 @@ CREATE TABLE NOCAPACITADOS (
 	Constraint PK_NOCAPACITADOS Primary Key (codEmpleado),
 	Constraint FK_NOCAPACITADOS_EMPLEADOS_codEmpleado Foreign Key (codEmpleado) References EMPLEADOS (codEmpleado)
 )
+
+/* BASE DE DATOS EJERCICIO 17 */
+CREATE DATABASE Ej17
+GO
+USE Ej17
+GO
+
+CREATE TABLE MUNICIPIOS (
+	cp Int,
+	Constraint PK_MUNICIPIOS Primary Key (cp)
+)
+
+CREATE TABLE VIVIENDAS (
+	calle Varchar(100),
+	numero Int,
+	cp Int,
+	Constraint PK_VIVIENDAS Primary Key (calle, numero, cp),
+	Constraint FK_VIVIENDAS_MUNICIPIOS_cp Foreign Key (cp) References MUNICIPIOS (cp)
+)
+
+CREATE TABLE PERSONAS (
+	dni Int,
+	empadronada Int,
+	calle Varchar(100),
+	numero Int,
+	cp Int,
+	cabezaFamilia Varchar(100),
+	vive Varchar(100),
+	Constraint PK_PERSONAS Primary Key (dni),
+	Constraint FK_PERSONAS_MUNICIPIOS_empadronada Foreign Key (empadronada) References MUNICIPIOS (cp),
+	Constraint FK_PERSONAS_VIVIENDAS_calle_numero_cp Foreign Key (calle, numero, cp) References VIVIENDAS (calle, numero, cp),
+	Constraint FK_PERSONAS_PERSONAS_cabezaFamilia Foreign Key (cabezaFamilia) References PERSONAS (cabezaFamilia)
+)
+
+CREATE TABLE PROPIETARIAS (
+	dni Int,
+	calle Varchar(100),
+	numero Int,
+	cp Int,
+	Constraint PK_PROPIETARIAS Primary Key (dni, calle, numero, cp),
+	Constraint FK_PROPIETARIAS_PERSONAS_dni Foreign Key (dni) References PERSONAS (dni),
+	Constraint FK_PROPIETARIAS_VIVIENDAS_calle_numero_cp Foreign Key (calle, numero, cp) References VIVIENDAS (calle, numero, cp)
+)
