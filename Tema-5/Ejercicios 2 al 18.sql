@@ -392,15 +392,10 @@ CREATE TABLE ASIGNATURASESTUDIOS (
 	Constraint FK_ASIGNATURASESTUDIOS_ESTUDIOS_codEstud Foreign Key (codEstud) References ESTUDIOS (codEstud)
 )
 
-CREATE TABLE FICHAS (
-	numReg Int,
-	codAsig Int,
-	curso Int,
-	junio Int,
-	septiembre Int,
-	Constraint PK_FICHAS Primary Key (numReg, codAsig, curso),
-	Constraint FK_FICHAS_EXPEDIENTES_numReg Foreign Key (numReg) References EXPEDIENTES (numReg),
-	Constraint FK_FICHAS_ASIGNATURAS_codAsig Foreign Key (codAsig) References ASIGNATURAS (codAsig)
+CREATE TABLE SEMINARIOS (
+	codSemin Int,
+	jefe Int,
+	Constraint PK_SEMINARIOS Primary Key (codSemin)
 )
 
 CREATE TABLE PROFESORES (
@@ -411,6 +406,10 @@ CREATE TABLE PROFESORES (
 	Constraint PK_PROFESORES Primary Key (nrp),
 	Constraint FK_PROFESORES_SEMINARIOS_seminario Foreign Key (seminario) References SEMINARIOS (codSemin)
 )
+
+-- Aquí añado la foreign key de profesores a la tabla de seminarios
+ALTER TABLE SEMINARIOS
+ADD Constraint FK_SEMINARIOS_PROFESORES_jefe Foreign Key (jefe) References PROFESORES (nrp)
 
 CREATE TABLE IMPARTE (
 	asignatura Int,
@@ -427,15 +426,13 @@ CREATE TABLE TUTORIAS (
 	alumno Int,
 	fecha date,
 	Constraint PK_TUTORIAS Primary Key (profesor, alumno, fecha),
-	Constraint FK_TUTORIAS_PROFESOR_profesor Foreign Key (profesor) References PROFESORES (nrp),
-	Constraint FK_TUTORIAS_ALUMNOS_alumno Foreign Key (alumno) References ALUMNOS (dni),
+	Constraint FK_TUTORIAS_PROFESOR_profesor Foreign Key (profesor) References PROFESORES (nrp)
 )
 
-CREATE TABLE SEMINARIOS (
-	codSemin Int,
-	jefe Int,
-	Constraint PK_SEMINARIOS Primary Key (codSemin),
-	Constraint FK_SEMINARIOS_PROFESORES_jefe Foreign Key (jefe) References PROFESORES (nrp)
+CREATE TABLE EXPEDIENTES (
+	numReg Int,
+	alumno Int,
+	Constraint PK_EXPEDIENTES Primary Key (numReg)
 )
 
 CREATE TABLE ALUMNOS (
@@ -447,11 +444,23 @@ CREATE TABLE ALUMNOS (
 	Constraint FK_ALUMNOS_EXPEDIENTES_expediente Foreign Key (expediente) References EXPEDIENTES (numReg)
 )
 
-CREATE TABLE EXPEDIENTES (
+-- Añado a tutorias la foreign key de alumnos
+ALTER TABLE TUTORIAS
+ADD Constraint FK_TUTORIAS_ALUMNOS_alumno Foreign Key (alumno) References ALUMNOS (dni)
+
+-- Añado a expedientes la foreign key de alumnos
+ALTER TABLE EXPEDIENTES
+ADD Constraint FK_EXPEDIENTES_ESTUDIOS_alumno Foreign Key (alumno) References ALUMNOS (dni)
+
+CREATE TABLE FICHAS (
 	numReg Int,
-	alumno Int,
-	Constraint PK_EXPEDIENTES Primary Key (numReg),
-	Constraint FK_EXPEDIENTES_ESTUDIOS_alumno Foreign Key (alumno) References ALUMNOS (dni)
+	codAsig Int,
+	curso Int,
+	junio Int,
+	septiembre Int,
+	Constraint PK_FICHAS Primary Key (numReg, codAsig, curso),
+	Constraint FK_FICHAS_EXPEDIENTES_numReg Foreign Key (numReg) References EXPEDIENTES (numReg),
+	Constraint FK_FICHAS_ASIGNATURAS_codAsig Foreign Key (codAsig) References ASIGNATURAS (codAsig)
 )
 
 CREATE TABLE ALUMNO_TUTOR_LEGAL (
