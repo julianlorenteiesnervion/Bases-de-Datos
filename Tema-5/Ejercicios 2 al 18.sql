@@ -339,5 +339,21 @@ CREATE TABLE EMPLEADOS_OFICINISTAS (
 	sueldo Int,
 	titulacion Varchar(100),
 	edificio Varchar(50),
-	oficina
+	oficina Int,
+	jefe Int,
+	Constraint PK_EMPLEADOS_OFICINISTAS Primary Key (dni),
+	Constraint FK_EMPLEADOSOFICINISTA_OFICINAS_edificio_oficina Foreign Key (edificio, oficina) References OFICINAS (edificio, numero),
+	Constraint FK_EmpleadosOficinistas_EmpleadosOficinistas_jefe Foreign Key (jefe) References EMPLEADOS_OFICINISTAS (dni)
+)
+
+CREATE TABLE EMPLEADOS_OBREROS (
+	dni Int,
+	nombre Varchar(30),
+	sueldo Int,
+	obra Int,
+	fechaInicio date,
+	jefe Int,
+	Constraint PK_EMPLEADOS_OBREROS Primary Key (dni),
+	Constraint FK_EmpleadosObreros_Obras_obra Foreign Key (obra) References OBRAS (id),
+	Constraint FK_EmpleadosObreros_EmpleadosObreros_jefe Foreign Key (jefe) References EMPLEADOS_OBREROS (dni)
 )
