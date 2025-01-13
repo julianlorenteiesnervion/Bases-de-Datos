@@ -568,3 +568,78 @@ CREATE TABLE PROPIETARIAS (
 	Constraint FK_PROPIETARIAS_PERSONAS_dni Foreign Key (dni) References PERSONAS (dni),
 	Constraint FK_PROPIETARIAS_VIVIENDAS_calle_numero_cp Foreign Key (calle, numero, cp) References VIVIENDAS (calle, numero, cp)
 )
+
+/* BASE DE DATOS EJERCICIO 18 */
+CREATE DATABASE Ej18
+GO
+USE Ej18
+GO
+
+CREATE TABLE AREAS (
+	codArea Int,
+	Constraint PK_AREAS Primary Key (codArea)
+)
+
+CREATE TABLE AREAPROFESOR (
+	area Int,
+	profesor Int,
+	Constraint PK_AREAPROFESOR Primary Key (area, profesor)
+)
+
+CREATE TABLE SEDES (
+	codSede Int,
+	Constraint PK_SEDES Primary Key (codSede)
+)
+
+CREATE TABLE ALUMNOS (
+	dni Int,
+	Constraint PK_ALUMNOS Primary Key (dni)
+)
+
+CREATE TABLE COORDINADORES (
+	dni Int,
+	Constraint PK_COORDINADORES Primary Key (dni)
+)
+
+CREATE TABLE PROFESORES (
+	dni Int,
+	encarga Int,
+	sede Int,
+	Constraint PK_PROFESORES Primary Key (dni),
+	Constraint FK_PROFESORES_AREAS_encarga Foreign Key (encarga) References AREAS (codArea),
+	Constraint FK_PROFESORES_SEDES_sede Foreign Key (sede) References SEDES (codSede)
+)
+
+CREATE TABLE CURSOS (
+	codCurso Int,
+	area Int,
+	coordinador Int,
+	dirigido Int,
+	Constraint PK_CURSOS Primary Key (codCurso),
+	Constraint FK_CURSOS_AREAS_area Foreign Key (area) References AREAS (codArea),
+	Constraint FK_CURSOS_COORDINADORES_coordinador_dirigido Foreign Key (coordinador, dirigido) References COORDINADORES (dni)
+)
+
+CREATE TABLE AREAS_SEDES (
+	area Int,
+	sede Int,
+	Constraint PK_AREASSEDES Primary Key (area, sede),
+	Constraint FK_AREASSEDES_AREAS_area Foreign Key (area) References AREAS (codArea),
+	Constraint FK_AREASSEDES_SEDES_sede Foreign Key (sede) References SEDES (codSede)
+)
+
+CREATE TABLE MATRICULAS (
+	curso Int,
+	alumno Int,
+	Constraint PK_MATRICULAS Primary Key (curso, alumno),
+	Constraint FK_MATRICULAS_CURSOS_curso Foreign Key (curso) References CURSOS (codCurso),
+	Constraint FK_MATRICULAS_ALUMNOS_alumno Foreign Key (alumno) References ALUMNOS (dni)
+)
+
+CREATE TABLE PROFESORES_CURSOS (
+	profesor Int,
+	curso Int,
+	Constraint PK_PROFESORESCURSOS Primary Key (profesor, curso),
+	Constraint FK_PROFESORESCURSOS_PROFESORES_profesor Foreign Key (profesor) References PROFESORES (dni),
+	Constraint FK_PROFESORESCURSOS_CURSOS_curso Foreign Key (curso) References CURSOS (codCurso)
+)
