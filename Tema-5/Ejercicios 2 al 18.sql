@@ -470,3 +470,25 @@ CREATE TABLE ALUMNO_TUTOR_LEGAL (
 	Constraint FK_ALUMNOTUTORLEGAL_ALUMNOS_dniAlumn Foreign Key (dniAlumn) References ALUMNOS (dni),
 	Constraint FK_ALUMNOTUTORLEGAL_TUTORESLEGALES_dniTutor Foreign Key (dniTutor) References TUTORESLEGALES (dni)
 )
+
+/* BASE DE DATOS EJERCICIO 16 */
+CREATE DATABASE Ej16
+GO
+USE Ej16
+GO
+
+CREATE TABLE EMPLEADOS (
+	codEmpleado Int,
+	nombre Varchar(50),
+	apellidos Varchar(100),
+	nif Int,
+	direccion Varchar(100),
+	telefono Varchar(9),
+	salario Int
+)
+
+CREATE TABLE CURSOS (
+	codCurso Int,
+	nombre Varchar(50),
+	descripcion Varchar(100)
+)
