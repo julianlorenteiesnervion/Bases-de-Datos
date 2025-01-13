@@ -484,11 +484,44 @@ CREATE TABLE EMPLEADOS (
 	nif Int,
 	direccion Varchar(100),
 	telefono Varchar(9),
-	salario Int
+	salario Int,
+	Constraint PK_EMPLEADOS Primary Key (codEmpleado)
 )
 
 CREATE TABLE CURSOS (
 	codCurso Int,
 	nombre Varchar(50),
-	descripcion Varchar(100)
+	descripcion Varchar(100),
+	Constraint PK_CURSOS Primary Key (codCurso)
+)
+
+CREATE TABLE EDICIONES (
+	codCurso Int,
+	fechaCurso date,
+	lugar Varchar(100),
+	horario time,
+	capacidad Int,
+	Constraint PK_EDICIONES Primary Key (codCurso, fechaCurso),
+	Constraint FK_EDICIONES_CURSOS_codCurso Foreign Key (codCurso) References CURSOS (codCurso)
+)
+
+CREATE TABLE RECIBE (
+	codEmpleado Int,
+	codCurso Int,
+	fechaCurso date,
+	Constraint PK_RECIBE Primary Key (codEmpleado, codCurso, fechaCurso),
+	Constraint FK_RECIBE_EMPLEADOS_codEmpleado Foreign Key (codEmpleado) References EMPLEADOS (codEmpleado),
+	Constraint FK_RECIBE_EDICIONES_codCurso_fechaCurso Foreign Key (codCurso, fechaCurso) References EDICIONES (codCurso, fechaCurso)
+)
+
+CREATE TABLE CAPACITADOS (
+	codEmpleado Int,
+	Constraint PK_CAPACITADOS Primary Key (codEmpleado),
+	Constraint FK_CAPACITADOS_EMPLEADOS_codEmpleado Foreign Key (codEmpleado) References EMPLEADOS (codEmpleado)
+)
+
+CREATE TABLE NOCAPACITADOS (
+	codEmpleado Int,
+	Constraint PK_NOCAPACITADOS Primary Key (codEmpleado),
+	Constraint FK_NOCAPACITADOS_EMPLEADOS_codEmpleado Foreign Key (codEmpleado) References EMPLEADOS (codEmpleado)
 )
