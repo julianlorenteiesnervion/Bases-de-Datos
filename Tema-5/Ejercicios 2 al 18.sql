@@ -17,6 +17,7 @@ CREATE TABLE Departamentos (
 CREATE TABLE Deptos_Empleados (
 	DNI_EMPLEADO tinyInt,
 	NUM_DPTO int,
+	Constraint PK_DEPTOSEMPLEADOS Primary Key (DNI_EMPLEADO, NUM_DPTO),
 	Constraint FK_DeptosEmpleados_Empleados_dniEmpleado FOREIGN KEY (DNI_EMPLEADO) REFERENCES Empleados (DNI),
 	Constraint FK_DeptosEmpleados_Departamentos_numDpto FOREIGN KEY (NUM_DPTO) REFERENCES Departamentos (NUMDPTO)
 )
@@ -103,7 +104,7 @@ CREATE TABLE PERSONAS (
 
 CREATE TABLE COCHES (
 	matricula Int,
-	color Varchar(10),
+	color Varchar(10) Not Null,
 	Constraint PK_COCHES Primary Key (matricula)
 )
 
@@ -162,7 +163,8 @@ CREATE TABLE ALUMNOS (
 	dni Int,
 	ordenador Int,
 	Constraint PK_ALUMNOS Primary Key (dni),
-	Constraint FK_Alumnos_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id)
+	Constraint FK_Alumnos_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id),
+	Constraint UQ_ORDENADOR UNIQUE (ordenador)
 )
 
 /* BASE DE DATOS EJERCICIO 10 */
@@ -227,13 +229,13 @@ CREATE TABLE APLICACIONES (
 
 CREATE TABLE UTILIZA (
 	alumno Int,
-	ordenador Int,
+	ordenador Int Not Null,
 	aplicacion Varchar(30),
-	tiempo Time,
+	tiempo Time Not Null,
 	Constraint PK_UTILIZA Primary Key (alumno, aplicacion),
-	Constraint FK_Utiliza_Alumnos_alumno Foreign Key (alumno) References ALUMNOS (dni),
-	Constraint FK_Utiliza_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id),
-	Constraint FK_Utiliza_Aplicaciones_aplicacion Foreign Key (aplicacion) References APLICACIONES (titulo)
+	Constraint FK_Utiliza_Alumnos_alumno Foreign Key (alumno) References ALUMNOS (dni) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	Constraint FK_Utiliza_Ordenadores_ordenador Foreign Key (ordenador) References ORDENADORES (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	Constraint FK_Utiliza_Aplicaciones_aplicacion Foreign Key (aplicacion) References APLICACIONES (titulo) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 
 /* BASE DE DATOS EJERCICIO 12 */
@@ -261,7 +263,7 @@ CREATE TABLE CONDUCTORES (
 	dni Int,
 	calle Varchar(100),
 	Constraint PK_CONDUCTORES Primary Key (dni),
-	Constraint FK_Conductores_Calles_calle Foreign Key (calle) References CALLES (nombre)
+	Constraint FK_Conductores_Calles_calle Foreign Key (calle) References CALLES (nombre) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 
 CREATE TABLE UTILIZA (
@@ -270,17 +272,17 @@ CREATE TABLE UTILIZA (
 	linea Int,
 	dia Date,
 	Constraint PK_UTILIZA Primary Key (conductor, autobus, dia),
-	Constraint FK_Utiliza_Conductores_conductor Foreign Key (conductor) References CONDUCTORES (dni),
-	Constraint FK_Utiliza_Autobuses_autobus Foreign Key (autobus) References AUTOBUSES (matricula),
-	Constraint FK_Utiliza_Lineas_linea Foreign Key (linea) References LINEAS (numero)
+	Constraint FK_Utiliza_Conductores_conductor Foreign Key (conductor) References CONDUCTORES (dni) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	Constraint FK_Utiliza_Autobuses_autobus Foreign Key (autobus) References AUTOBUSES (matricula) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	Constraint FK_Utiliza_Lineas_linea Foreign Key (linea) References LINEAS (numero) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 
 CREATE TABLE PASA (
 	linea Int,
 	calle Varchar(100),
 	Constraint PK_PASA Primary Key (linea, calle),
-	Constraint FK_Pasa_Lineas_linea Foreign Key (linea) References LINEAS (numero),
-	Constraint FK_Pasa_Calles_calle Foreign Key (calle) References CALLES (nombre)
+	Constraint FK_Pasa_Lineas_linea Foreign Key (linea) References LINEAS (numero) ON UPDATE NO ACTION ON DELETE NO ACTION,
+	Constraint FK_Pasa_Calles_calle Foreign Key (calle) References CALLES (nombre) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 
 /* BASE DE DATOS EJERCICIO 13 */
@@ -305,6 +307,7 @@ CREATE TABLE OFICINAS (
 	edificio Varchar(50),
 	numero Int,
 	empresa Int,
+	Constraint PK_OFICINAS Primary Key (edificio, numero),
 	Constraint FK_Oficinas_Edificios_edificio Foreign Key (edificio) References EDIFICIOS (nombre),
 	Constraint FK_Oficinas_Empresas_empresa Foreign Key (empresa) References EMPRESAS (cif)
 )
@@ -343,7 +346,7 @@ CREATE TABLE EMPLEADOS_OFICINISTAS (
 	jefe Int,
 	Constraint PK_EMPLEADOS_OFICINISTAS Primary Key (dni),
 	Constraint FK_EMPLEADOSOFICINISTA_OFICINAS_edificio_oficina Foreign Key (edificio, oficina) References OFICINAS (edificio, numero),
-	Constraint FK_EmpleadosOficinistas_EmpleadosOficinistas_jefe Foreign Key (jefe) References EMPLEADOS_OFICINISTAS (dni)
+	Constraint FK_EmpleadosOficinistas_jefe Foreign Key (jefe) References EMPLEADOS_OFICINISTAS (dni)
 )
 
 CREATE TABLE EMPLEADOS_OBREROS (
