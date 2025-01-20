@@ -13,9 +13,9 @@ CREATE TABLE Productos (
     Descuento DECIMAL(5, 2) NULL,                -- Descuento aplicable al producto
     Activo BIT NOT NULL,                          -- Estado activo o inactivo del producto
 	Constraint CK_Precio Check (Precio > 0 OR (Descuento = 0 AND Precio = CAST(Precio AS INT))),
-	Constraint CK_Stock Check (Stock >= 0 OR (Stock > 0 AND Activo = 1) OR (Stock % 10 = 0 AND Categoria = 'Electrónica') OR (Stock < 500 AND Categoria = 'Alimentos')),
-	Constraint CK_Descuento Check ((Descuento < (Precio * 0.5) AND Descuento >= 0) OR (Descuento < 20 AND Activo = 1) OR (Descuento > 0 AND FechaIngreso > '01-01-2020')),
+	Constraint CK_Stock Check (((Stock >= 0 AND Activo = 0) OR (Stock > 0 AND Activo = 1)) AND ((Stock % 10 = 0 AND Categoria = 'Electrónica') OR (Stock < 500 AND Categoria = 'Alimentos'))),
+	Constraint CK_Descuento Check ((Descuento < (Precio * 0.5) AND Descuento >= 0) OR (Descuento < 20 AND Activo = 1) OR (Descuento > 0 AND FechaIngreso > '2020-01-01')),
 	Constraint CK_FechaIngreso Check (FechaIngreso < CURRENT_TIMESTAMP),
-	Constraint CK_Nombre Check (Nombre LIKE ('%[^a-zA-Z0-9 ]%')),
+	Constraint CK_Nombre Check (Nombre LIKE ('%[a-zA-Z0-9]%')),
 	Constraint CK_Categoria Check (Categoria IN ('Electrónica', 'Ropa', 'Alimentos'))
 );
