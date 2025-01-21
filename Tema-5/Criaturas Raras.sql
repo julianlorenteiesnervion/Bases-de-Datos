@@ -21,7 +21,7 @@ CREATE TABLE CriaturitasRaras(
 	Constraint CK_NumeroIntermedio Check ((NumeroIntermedio % 2 = 0) AND (NumeroIntermedio BETWEEN NumeroChico AND NumeroGrande)),
 	Constraint CK_FechaNac Check (FechaNac < CURRENT_TIMESTAMP),
 	Constraint CK_NivelIngles Check (NivelIngles IN ('A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2')),
-	Constraint CK_Historieta Check (Historieta NOT IN ('oscuro', 'apocalipsis')),
+	Constraint CK_Historieta Check (Historieta NOT IN ('%oscuro%', '%apocalipsis%')),
 	Constraint CK_Temperatura Check (Temperatura BETWEEN 32.5 AND 44),
 	Constraint CK_Imaginacion Check (Historieta != ('Pecadores' + NumeroPie))
 ) 
