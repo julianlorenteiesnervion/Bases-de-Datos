@@ -30,10 +30,15 @@ CREATE TABLE EMPLEADOS (
 	ventas Int
 )
 
+-- Creación de las restricciones
 ALTER TABLE EMPLEADOS ADD Constraint PK_EMPLEADOS Primary Key (numEmp)
 ALTER TABLE EMPLEADOS ADD Constraint FK_EMPLEADOS_EMPLEADOS_jefe Foreign Key (jefe) References EMPLEADOS (numEmp)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
+
+-- Eliminación de las restricciones
+ALTER TABLE EMPLEADOS DROP Constraint PK_EMPLEADOS
+ALTER TABLE EMPLEADOS DROP Constraint FK_EMPLEADOS_EMPLEADOS_jefe
 
 CREATE TABLE CLIENTES (
 	numClie Int Not Null,
@@ -42,7 +47,11 @@ CREATE TABLE CLIENTES (
 	limiteCredito Int
 )
 
+-- Creación de las restricciones
 ALTER TABLE CLIENTES ADD Constraint PK_CLIENTES Primary Key (numClie)
+
+-- Eliminación de las restricciones
+ALTER TABLE CLIENTES DROP Constraint PK_CLIENTES
 
 CREATE TABLE OFICINAS (
 	oficina Int Not Null,
@@ -53,10 +62,15 @@ CREATE TABLE OFICINAS (
 	ventas Int
 )
 
+-- Creación de las restricciones
 ALTER TABLE OFICINAS ADD Constraint PK_OFICINAS Primary Key (oficina)
 ALTER TABLE OFICINAS ADD Constraint FK_OFICINAS_EMPLEADOS_dir Foreign Key (dir) References EMPLEADOS (numEmp)
 ON UPDATE CASCADE
 ON DELETE CASCADE
+
+-- Eliminación de las restricciones
+ALTER TABLE OFICINAS DROP Constraint PK_OFICINAS
+ALTER TABLE OFICINAS DROP Constraint FK_OFICINAS_EMPLEADOS_dir
 
 CREATE TABLE PRODUCTOS (
 	idFab Int Not Null,
@@ -66,7 +80,11 @@ CREATE TABLE PRODUCTOS (
 	existencias Int
 )
 
+-- Creación de las restricciones
 ALTER TABLE PRODUCTOS ADD Constraint PK_PRODUCTOS Primary Key (idFab, idProducto)
+
+-- Eliminación de las restricciones
+ALTER TABLE PRODUCTOS DROP Constraint PK_PRODUCTOS
 
 CREATE TABLE PEDIDOS (
 	numPedido Int Not Null,
@@ -79,6 +97,7 @@ CREATE TABLE PEDIDOS (
 	importe Int
 )
 
+-- Creación de las restricciones
 ALTER TABLE PEDIDOS ADD Constraint PK_PEDIDOS Primary Key (numPedido)
 ALTER TABLE PEDIDOS ADD Constraint FK_PEDIDOS_CLIENTES_clie Foreign Key (clie) References CLIENTES (numClie)
 ON UPDATE CASCADE
@@ -89,3 +108,9 @@ ON DELETE CASCADE
 ALTER TABLE PEDIDOS ADD Constraint FK_PEDIDOS_PRODUCTOS_fab_producto Foreign Key (fab, producto) References PRODUCTOS (idFab, idProducto)
 ON UPDATE CASCADE
 ON DELETE CASCADE
+
+-- Eliminación de las restricciones
+ALTER TABLE PEDIDOS DROP Constraint PK_PEDIDOS
+ALTER TABLE PEDIDOS DROP Constraint FK_PEDIDOS_CLIENTES_clie
+ALTER TABLE PEDIDOS DROP Constraint FK_PEDIDOS_EMPLEADOS_resp
+ALTER TABLE PEDIDOS DROP Constraint FK_PEDIDOS_PRODUCTOS_fab_producto
