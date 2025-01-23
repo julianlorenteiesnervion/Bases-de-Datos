@@ -40,6 +40,9 @@ ON UPDATE NO ACTION
 ALTER TABLE EMPLEADOS DROP Constraint PK_EMPLEADOS
 ALTER TABLE EMPLEADOS DROP Constraint FK_EMPLEADOS_EMPLEADOS_jefe
 
+-- Creación de campos
+ALTER TABLE EMPLEADOS ADD sueldo Int
+
 CREATE TABLE CLIENTES (
 	numClie Int Not Null,
 	nombre Varchar(50),
@@ -52,6 +55,9 @@ ALTER TABLE CLIENTES ADD Constraint PK_CLIENTES Primary Key (numClie)
 
 -- Eliminación de las restricciones
 ALTER TABLE CLIENTES DROP Constraint PK_CLIENTES
+
+-- Creación de campos
+ALTER TABLE CLIENTES ADD cuentaBancaria Int
 
 CREATE TABLE OFICINAS (
 	oficina Int Not Null,
@@ -85,6 +91,9 @@ ALTER TABLE PRODUCTOS ADD Constraint PK_PRODUCTOS Primary Key (idFab, idProducto
 
 -- Eliminación de las restricciones
 ALTER TABLE PRODUCTOS DROP Constraint PK_PRODUCTOS
+
+-- Creación de campos
+ALTER TABLE PRODUCTOS ADD color Varchar(30)
 
 CREATE TABLE PEDIDOS (
 	numPedido Int Not Null,
