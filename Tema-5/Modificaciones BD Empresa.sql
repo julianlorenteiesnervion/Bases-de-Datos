@@ -43,6 +43,10 @@ ALTER TABLE EMPLEADOS DROP Constraint FK_EMPLEADOS_EMPLEADOS_jefe
 -- Creación de campos
 ALTER TABLE EMPLEADOS ADD sueldo Money
 
+-- Modificación del tipo de datos
+ALTER TABLE EMPLEADOS ALTER COLUMN sueldo Decimal(3,1)
+ALTER TABLE EMPLEADOS ALTER COLUMN nombre Varchar(100)
+
 CREATE TABLE CLIENTES (
 	numClie Int Not Null,
 	nombre Varchar(50),
@@ -65,7 +69,7 @@ CREATE TABLE OFICINAS (
 	region Varchar(50),
 	dir Int,
 	objetivo Varchar(100),
-	ventas Int
+	ventas Decimal(3,1)
 )
 
 -- Creación de las restricciones
@@ -77,6 +81,9 @@ ON DELETE CASCADE
 -- Eliminación de las restricciones
 ALTER TABLE OFICINAS DROP Constraint PK_OFICINAS
 ALTER TABLE OFICINAS DROP Constraint FK_OFICINAS_EMPLEADOS_dir
+
+-- Modificación del tipo de datos
+ALTER TABLE OFICINAS ALTER COLUMN ventas Decimal(4,1)
 
 CREATE TABLE PRODUCTOS (
 	idFab Int Not Null,
