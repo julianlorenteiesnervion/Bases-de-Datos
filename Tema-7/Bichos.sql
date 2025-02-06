@@ -34,3 +34,7 @@ WHERE Especie = 'Perro' AND CodigoPropietario = 104
 INSERT INTO BI_Mascotas_Enfermedades VALUES (14, 'PH004', CURRENT_TIMESTAMP, NULL)
 INSERT INTO BI_Mascotas_Enfermedades VALUES (15, 'PH104', CURRENT_TIMESTAMP, NULL)
 INSERT INTO BI_Mascotas_Enfermedades VALUES (16, 'PM004', CURRENT_TIMESTAMP, NULL)
+
+-- Escribe una consulta para obtener el nombre, especie y raza de todas las mascotas, ordenados por edad
+SELECT Alias, Especie, Raza FROM BI_Mascotas
+ORDER BY FechaFallecimiento DESC
