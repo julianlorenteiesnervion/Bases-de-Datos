@@ -38,3 +38,7 @@ INSERT INTO BI_Mascotas_Enfermedades VALUES (16, 'PM004', CURRENT_TIMESTAMP, NUL
 -- Escribe una consulta para obtener el nombre, especie y raza de todas las mascotas, ordenados por edad
 SELECT Alias, Especie, Raza FROM BI_Mascotas
 ORDER BY FechaFallecimiento DESC
+
+-- Escribe los códigos de todas las mascotas que han ido alguna vez al veterinario un lunes o un viernes. Para averiguar el dia de la semana de una fecha se usa la función DATEPART (WeekDay, fecha) que devuelve un entero entre 1 y 7 donde el 1 corresponde al lunes, el dos al martes y así sucesivamente. NOTA: El servidor se puede configurar para que la semana empiece en lunes o domingo
+SELECT Mascota FROM BI_Visitas
+WHERE DATEPART(DAY, SELECT Fecha FROM BI_Visitas) IN (1, 5)
