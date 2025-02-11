@@ -35,7 +35,7 @@ SELECT emp_id, job_lvl, fname, lname FROM employee
 WHERE job_lvl < 100
 ORDER BY fname ASC
 
--- Inserta un nuevo
+-- Inserta un nuevo autor
 INSERT INTO authors VALUES ('999-78-4000', 'Lorente', 'Julián', '642 123-5555', '123 Nervión Street', 'Seville', 'CA', 12345, 1)
 
 -- Inserta dos libros, escritos por el autor que has insertado antes y publicados por la editorial "Ramona"

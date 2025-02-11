@@ -10,7 +10,7 @@ INSERT INTO BI_Mascotas VALUES ('PP123', 'Ibérico', 'Cerdo', '2020-11-22', NULL,
 INSERT INTO BI_Mascotas VALUES ('PP321', 'Alemán', 'Gato', '2021-05-10', NULL, 'Oreo', 108)
 
 -- Escribe un SELECT para obtener los IDs de las enfermedades que ha sufrido alguna mascota. Los IDs no deben repetirse
-SELECT IDEnfermedad FROM BI_Mascotas_Enfermedades
+SELECT DISTINCT IDEnfermedad FROM BI_Mascotas_Enfermedades
 
 -- El cliente Josema Ravilla ha llevado a visita a todas sus mascotas
 -- Escribe un SELECT para averiguar el código de Josema Ravilla
@@ -37,8 +37,10 @@ INSERT INTO BI_Mascotas_Enfermedades VALUES (16, 'PM004', CURRENT_TIMESTAMP, NUL
 
 -- Escribe una consulta para obtener el nombre, especie y raza de todas las mascotas, ordenados por edad
 SELECT Alias, Especie, Raza FROM BI_Mascotas
-ORDER BY FechaFallecimiento DESC
+ORDER BY FechaNacimiento
 
 -- Escribe los códigos de todas las mascotas que han ido alguna vez al veterinario un lunes o un viernes. Para averiguar el dia de la semana de una fecha se usa la función DATEPART (WeekDay, fecha) que devuelve un entero entre 1 y 7 donde el 1 corresponde al lunes, el dos al martes y así sucesivamente. NOTA: El servidor se puede configurar para que la semana empiece en lunes o domingo
 SELECT Mascota FROM BI_Visitas
-WHERE DATEPART(DAY, SELECT Fecha FROM BI_Visitas) IN (1, 5)
+WHERE DATEPART(WEEKDAY, Fecha) IN (1, 5)
+
+SELECT @@DATEFIRST
