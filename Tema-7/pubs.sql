@@ -60,3 +60,37 @@ WHERE country = 'Germany'
 UPDATE publishers
 SET city = 'Stuttgart'
 WHERE city = 'M nchen'
+
+-- Boletín 8.2
+-- Número de libros que tratan de cada tema
+SELECT [type], COUNT([type]) AS 'Nº libros' FROM titles
+GROUP BY [type]
+
+-- Número de autores diferentes en cada ciudad y estado
+SELECT [state] AS 'Estado', city AS 'Ciudad', COUNT(au_fname) AS 'Autores' FROM authors
+GROUP BY [state], city
+
+-- Nombre, apellidos, nivel y antigüedad en la empresa de los empleados con un nivel entre 100 y 150
+SELECT fname AS 'Nombre', lname AS 'Apellido', (YEAR(CURRENT_TIMESTAMP) - YEAR(hire_date)) AS 'Años Antigüedad' FROM employee
+WHERE job_lvl BETWEEN 100 AND 150
+
+-- Número de editoriales en cada país. Incluye el país
+SELECT country AS 'País', COUNT(country) AS 'Nº Editoriales'
+FROM publishers
+GROUP BY country
+
+-- Número de unidades vendidas de cada libro en cada año (title_id, unidades y año)
+SELECT title_id AS 'Título', YEAR(ord_date) AS 'Año', SUM(qty) AS 'Cantidad'
+FROM sales
+GROUP BY title_id, YEAR(ord_date)
+
+-- Número de autores que han escrito cada libro (title_id y número de autores)
+SELECT title_id AS 'Título', COUNT(au_id) AS 'Nº Autores'
+FROM titleauthor
+GROUP BY title_id
+
+-- ID, Título, tipo y precio de los libros cuyo adelanto inicial (advance) tenga un valor superior a $7.000, ordenado por tipo y título
+SELECT title_id AS 'ID', title AS 'Título', [type] AS 'Tipo', price AS 'Precio'
+FROM titles
+WHERE advance > 7000
+ORDER BY type, title ASC
