@@ -46,6 +46,11 @@ SELECT Title, FirstName, LastName
 FROM SalesLT.Customer
 WHERE CompanyName LIKE ('%cycle%') OR CompanyName LIKE ('%bike%')
 
+-- 3. Explica cómo podrías solucionar el problema detectado en el ejercicio anterior, mostrando la inicial del nombre en el caso de que tenga Pista: Busca la función ISNULL() en la ayuda
+SELECT Title, FirstName, ISNULL(MiddleName, ' ') AS 'Inicial', LastName
+FROM SalesLT.Customer
+WHERE CompanyName LIKE ('%cycle%') OR CompanyName LIKE ('%bike%')
+
 -- 4. Número de productos de cada color
 SELECT Color, COUNT(ProductID) AS 'Nº Productos'
 FROM SalesLT.Product
