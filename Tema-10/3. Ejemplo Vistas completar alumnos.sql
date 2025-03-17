@@ -26,14 +26,12 @@ FROM Products AS P
 -- y Diferencia porcentual entre los dos valores.
 -- Para obtener la diferencia porcentual usar:
 --CAST (((V97.VentasAnuales - ISNULL(V96.VentasAnuales, 0))*100)/V96.VentasAnuales AS Decimal(5,1)) AS Porcentaje
-SELECT P.ProductName, (SELECT OD.PRODUCTID, COUNT(OD.ProductID) FROM Orders AS O
-INNER JOIN [Order Details] AS OD ON O.OrderID = OD.OrderID
-WHERE YEAR(O.OrderDate) = 1996
-GROUP BY OD.ProductID) AS 'Ventas del 96'
-FROM Products AS P
-INNER JOIN [Order Details] AS OD ON P.ProductID = OD.ProductID
-INNER JOIN Orders AS O ON OD.OrderID = O.OrderID
---GROUP BY P.ProductName
+SELECT Ventas97.ProductName AS Nombre, ISNULL(Ventas96.VentasAnuales, 0) AS 'Ventas 96', Ventas97.VentasAnuales AS 'Ventas 97',
+(Ventas97.VentasAnuales - ISNULL(Ventas96.VentasAnuales, 0)) AS 'Diferencia de ventas',
+CONCAT(CAST(((Ventas97.VentasAnuales - ISNULL(Ventas96.VentasAnuales, 0))*100)/Ventas96.VentasAnuales AS Decimal(5,1)), '%') AS 'Diferencia porcentual'
+FROM Ventas96
+RIGHT JOIN Ventas97
+ON Ventas96.ProductID = Ventas97.ProductID
 
 SELECT * FROM [Order Details]
 SELECT * FROM Orders
