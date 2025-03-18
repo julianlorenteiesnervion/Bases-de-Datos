@@ -31,11 +31,29 @@ CREATE VIEW ProfeSinAsignatura AS (
 	WHERE P.dni NOT IN (SELECT dni FROM Imparte)
 )
 
--- 5. Crear la vista ProfeSinAlumnos que muestre a los profesores que imparten una asignatura donde no hay ningún alumno matriculado.
-SELECT DISTINCT I.dni FROM Imparte AS I
-LEFT JOIN Matriculado AS M ON I.cod = M.cod
-WHERE I.cod IS NULL
+-- 5. Crear la vista ProfeSinAlumnos que muestre a los profesores que imparten una 
+-- asignatura donde no hay ningún alumno matriculado.
+CREATE VIEW ProfeSinAlumnos AS (
+	SELECT DISTINCT I.dni FROM Imparte AS I
+	LEFT JOIN Matriculado AS M ON I.cod = M.cod
+	WHERE M.cod IS NULL
+)
 
-select * from matriculado
-SELECT * FROM MATRICULADO
-SELECT * FROM IMPARTE
+-- 6. Crear la vista ProfeSinClase que muestra los profesores que no dan clase. Ya sea por no impartir
+-- ninguna asignatura o por impartir una asignatura donde no hay ningún alumno matriculado.
+CREATE VIEW ProfeSinClase AS (
+	SELECT dni FROM ProfeSinAsignatura
+	UNION
+	SELECT * FROM ProfeSinAlumnos
+)
+
+-- 7. Modificar la vista Repetidores para que muestre la edad del alumno.
+ALTER VIEW Repetidores AS (
+	SELECT A.nombre, A.dni, YEAR(GETDATE()) - YEAR(A.fecNac) AS 'edad'
+	FROM Alumno AS A
+	INNER JOIN matriculado AS M ON A.dni = M.dni
+	WHERE M.repe > 0
+)
+
+-- 8. Eliminar la vista ProfeSinClase.
+DROP VIEW ProfeSinClase
