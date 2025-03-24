@@ -20,7 +20,7 @@ CREATE VIEW AsignaturasRepetidores AS (
 
 -- 3. Crear la vista ProfeRepetidores que muestre el dni de los profes que imparten clase a algún alumno repetidor.
 CREATE VIEW ProfeRepetidores AS (
-	SELECT I.dni FROM Imparte AS I
+	SELECT DISTINCT I.dni FROM Imparte AS I
 	INNER JOIN AsignaturasRepetidores AS A ON I.cod = A.cod
 	WHERE I.dni IN (SELECT dni FROM AsignaturasRepetidores)
 )
