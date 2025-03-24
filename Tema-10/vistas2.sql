@@ -10,24 +10,7 @@ CREATE VIEW FullAddressCanadaCustomer AS (
 )
 
 -- 2. Nombre de cada categoría y producto más caro y más barato de la misma, incluyendo los precios.
-WITH ProductosPorCategoria AS (
-    SELECT
-        pc.Name AS Categoria,
-        p.Name AS Producto,
-        p.ListPrice AS Precio,
-        ROW_NUMBER() OVER (PARTITION BY pc.Name ORDER BY p.ListPrice DESC) AS RankCaro,
-        ROW_NUMBER() OVER (PARTITION BY pc.Name ORDER BY p.ListPrice ASC) AS RankBarato
-    FROM SalesLT.ProductCategory pc
-    JOIN SalesLT.Product p ON pc.ProductCategoryID = p.ProductCategoryID
-)
-SELECT
-    Categoria,
-    MAX(CASE WHEN RankCaro = 1 THEN Producto END) AS ProductoMasCaro,
-    MAX(CASE WHEN RankCaro = 1 THEN Precio END) AS PrecioMasCaro,
-    MAX(CASE WHEN RankBarato = 1 THEN Producto END) AS ProductoMasBarato,
-    MAX(CASE WHEN RankBarato = 1 THEN Precio END) AS PrecioMasBarato
-FROM ProductosPorCategoria
-GROUP BY Categoria
+-- Pendiente de hacer
 
 -- 3. Total de Ventas en cada país en dinero (Ya hecha en el boletín 9.3).
 CREATE VIEW TotalVentas AS (
@@ -72,7 +55,7 @@ CREATE VIEW TresPaises AS
 	ORDER BY TotalVentas DESC
 
 -- 8. Sobre la consulta tres de ventas por país, calcula el valor medio y repite la consulta tres pero incluyendo solamente los países cuyas ventas estén por encima de la media.
-WITH VentasPorPais AS (
+CREATE VIEW VentasPorPais AS (
     SELECT a.CountryRegion, SUM(soh.TotalDue) AS TotalVentas FROM SalesLT.SalesOrderHeader soh
     JOIN SalesLT.CustomerAddress ca ON soh.CustomerID = ca.CustomerID
     JOIN SalesLT.Address a ON ca.AddressID = a.AddressID
@@ -93,9 +76,9 @@ SELECT c.CustomerID, 'Bikes' AS Categoria FROM SalesLT.Customer c
 WHERE NOT EXISTS (
     SELECT 1
     FROM SalesLT.SalesOrderHeader soh
-    JOIN SalesLT.SalesOrderDetail sod ON soh.SalesOrderID = sod.SalesOrderID
-    JOIN SalesLT.Product p ON sod.ProductID = p.ProductID
-    JOIN SalesLT.ProductCategory pc ON p.ProductCategoryID = pc.ProductCategoryID
+    INNER JOIN SalesLT.SalesOrderDetail sod ON soh.SalesOrderID = sod.SalesOrderID
+    INNER JOIN SalesLT.Product p ON sod.ProductID = p.ProductID
+    INNER JOIN SalesLT.ProductCategory pc ON p.ProductCategoryID = pc.ProductCategoryID
     WHERE pc.Name = 'Bikes' AND soh.CustomerID = c.CustomerID
 )
 
