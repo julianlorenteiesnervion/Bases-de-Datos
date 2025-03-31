@@ -169,3 +169,94 @@ AS
 	END
 
 EXECUTE InsertarEmpleadoHospital 7839, 'General', 22, 120000, M
+
+-- 9) Crear un procedimiento para devolver dos informes sobre los empleados de la plantilla de un determinado hospital, sala, turno (campo T de Plantilla) o función. El informe mostrará primero, número de empleados, media del salario, suma del salario y la función, turno, sala u hospital, y segundo, un informe personalizado de cada uno, que muestre código de empleado, apellido y salario. Recibiremos un solo parámetro, que será el nombre del hospital, el nombre de la sala, el turno de la plantilla o la función de la plantilla.
+CREATE OR ALTER PROCEDURE crearInforme @parametro VARCHAR(50) AS
+IF ((SELECT COUNT (*) FROM Hospital WHERE Nombre = @parametro) > 0)
+	BEGIN
+		SELECT Hospital_Cod, COUNT(Empleado_No) AS CantidadEmpleados, AVG(Salario) AS MediaSalario, SUM(Salario) AS SalarioTotal 
+		FROM Plantilla
+		WHERE Hospital_Cod = (SELECT Hospital_Cod FROM Hospital WHERE Nombre = @parametro)
+		GROUP BY Hospital_Cod
+
+		SELECT Empleado_No, Apellido, Salario 
+		FROM Plantilla 
+		WHERE Hospital_Cod = (SELECT Hospital_Cod FROM Hospital WHERE Nombre = @parametro)
+	END
+ELSE IF ((SELECT COUNT (*) FROM Sala WHERE Nombre = @parametro) > 0)
+	BEGIN
+		SELECT Sala_Cod, COUNT(Empleado_No) AS CantidadEmpleados, AVG(Salario) AS MediaSalario, SUM(Salario) AS SalarioTotal 
+		FROM Plantilla
+		WHERE Sala_Cod = (SELECT DISTINCT Sala_Cod FROM Sala WHERE Nombre = @parametro)
+		GROUP BY Sala_Cod
+
+		SELECT Empleado_No, Apellido, Salario 
+		FROM Plantilla 
+		WHERE Sala_Cod = (SELECT DISTINCT Sala_Cod FROM Sala WHERE Nombre = @parametro)
+	END
+ELSE IF ((SELECT COUNT (*) FROM Plantilla WHERE T = @parametro) > 0)
+	BEGIN
+		SELECT T, COUNT(Empleado_No) AS CantidadEmpleados, AVG(Salario) AS MediaSalario, SUM(Salario) AS SalarioTotal 
+		FROM Plantilla
+		WHERE T = @parametro
+		GROUP BY T
+
+		SELECT Empleado_No, Apellido, Salario 
+		FROM Plantilla 
+		WHERE T = @parametro
+	END
+ELSE IF ((SELECT COUNT (*) FROM Plantilla WHERE Funcion = @parametro) > 0)
+	BEGIN
+		SELECT Funcion, COUNT(Empleado_No) AS CantidadEmpleados, AVG(Salario) AS MediaSalario, SUM(Salario) AS SalarioTotal 
+		FROM Plantilla
+		WHERE Funcion = @parametro
+		GROUP BY Funcion
+
+		SELECT Empleado_No, Apellido, Salario 
+		FROM Plantilla 
+		WHERE Funcion = @parametro
+	END
+ELSE
+	BEGIN
+		PRINT('Ningun registro coincide con el parámetro dado')
+	END
+GO
+
+EXECUTE crearInforme 's'
+
+-- 10) Crear un procedimiento en el que pasaremos como parámetro el Apellido de un empleado. El procedimiento devolverá los subordinados del empleado escrito, si el empleado no existe en la base de datos, informaremos de ello, si el empleado no tiene subordinados, lo informa remos con un mensaje y mostraremos su jefe. Mostrar el número de empleado, Apellido, Oficio y Departamento de los subordinados.
+CREATE OR ALTER PROCEDURE subordinadosEmpleado @apellido VARCHAR(50) 
+AS
+BEGIN
+    -- Obtener el número de empleado y su jefe
+    DECLARE @empNo INT, @jefeNo INT
+    
+    SELECT @empNo = Emp_No, @jefeNo = Dir FROM EMP WHERE Apellido = @apellido
+
+    -- Si no existe el empleado
+    IF @empNo IS NULL
+    BEGIN
+        PRINT('EL EMPLEADO NO EXISTE EN LA BASE DE DATOS')
+    END
+    ELSE IF NOT EXISTS (SELECT 1 FROM EMP WHERE Dir = @empNo)
+    BEGIN
+        PRINT('EL EMPLEADO NO TIENE SUBORDINADOS')
+        IF @jefeNo IS NOT NULL
+        BEGIN
+            PRINT('SU JEFE ES')
+            SELECT Emp_No, Apellido, Oficio, Dept_No FROM EMP WHERE Emp_No = @jefeNo
+        END
+        ELSE
+        BEGIN
+            PRINT('EL EMPLEADO NO TIENE JEFE REGISTRADO')
+        END
+    END
+    ELSE
+    BEGIN
+        -- Mostrar subordinados
+        PRINT('LOS SUBORDINADOS DEL EMPLEADO SON')
+        SELECT Emp_No, Apellido, Oficio, Dept_No FROM EMP WHERE Dir = @empNo
+    END
+END
+
+EXECUTE subordinadosEmpleado 'SERRA'
