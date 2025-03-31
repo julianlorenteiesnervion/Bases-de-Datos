@@ -155,8 +155,17 @@ EXECUTE BorrarEmpleadoSegunParametrosComprobacion 7119, 'PEPA', 'DIRECTOR', 7782
 -- la sala o el hospital, no insertaremos y lo informaremos.
 -- Para insertar la función de la plantilla deberá estar entre los que hay en la base de datos, al igual que el Turno.
 -- El salario no superará las 500.000 euros.
-CREATE OR ALTER PROCEDURE InsertarEmpleadoHospital
+CREATE OR ALTER PROCEDURE InsertarEmpleadoHospital @numEmp INT, @nombreHospital VARCHAR(50), @salaCod INT, @salario NUMERIC(9, 2), @turno CHAR
 AS
 	BEGIN
-		IF
+		IF ((@numEmp NOT IN (SELECT @numEmp FROM Emp)) AND (@nombreHospital IN (SELECT Nombre FROM Hospital)) AND @salario < 500000)
+			BEGIN
+				INSERT INTO Plantilla VALUES (@numEmp, @salaCod, (SELECT Hospital_Cod FROM Hospital WHERE Nombre = @nombreHospital), (SELECT Apellido FROM Emp WHERE Emp_No = @numEmp), (SELECT Oficio FROM Emp WHERE Emp_No = @numEmp), @turno, @salario)
+			END
+		ELSE
+			BEGIN
+				PRINT('Los datos no cumplen las restricciones')
+			END
 	END
+
+EXECUTE InsertarEmpleadoHospital 7839, 'General', 22, 120000, M
