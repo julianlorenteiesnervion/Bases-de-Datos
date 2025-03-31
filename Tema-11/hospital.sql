@@ -155,3 +155,8 @@ EXECUTE BorrarEmpleadoSegunParametrosComprobacion 7119, 'PEPA', 'DIRECTOR', 7782
 -- la sala o el hospital, no insertaremos y lo informaremos.
 -- Para insertar la función de la plantilla deberá estar entre los que hay en la base de datos, al igual que el Turno.
 -- El salario no superará las 500.000 euros.
+CREATE OR ALTER PROCEDURE InsertarEmpleadoHospital
+AS
+	BEGIN
+		IF
+	END
