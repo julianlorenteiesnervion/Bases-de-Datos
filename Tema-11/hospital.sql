@@ -72,8 +72,86 @@ AS
 EXECUTE ApellidoSalarioOficioComisionNingunValor ' '
 
 -- 7) Crear un procedimiento para mostrar el salario, oficio, apellido y nombre del departamento de todos los empleados que contengan en su apellido el valor que le pasemos como parámetro.
-CREATE OR ALTER PROCEDURE SalarioOficioApellidoNombreSegunApellido
+CREATE OR ALTER PROCEDURE SalarioOficioApellidoNombreSegunApellido @valor VARCHAR(50)
 AS
 	BEGIN
-		
+		SELECT E.Salario, E.Oficio, E.Apellido, D.DNombre FROM Emp E
+		INNER JOIN Dept D ON E.Dept_No = D.Dept_No
+		WHERE E.Apellido LIKE '%' + @valor + '%'
 	END
+
+EXECUTE SalarioOficioApellidoNombreSegunApellido 'IN'
+
+-- 8) Crear un procedimiento que recupere el número departamento, el nombre y número de empleados, dándole como valor el nombre del departamento, si el nombre introducido no es válido, mostraremos un mensaje informativo comunicándolo.
+CREATE OR ALTER PROCEDURE NumDepartamentoNombreNumEmpleadoSegunNombre @nombreDept VARCHAR(50)
+AS
+	BEGIN
+	IF (@nombreDept IN (SELECT DNombre FROM Dept))
+		BEGIN
+			SELECT D.Dept_No, D.DNombre, COUNT(E.Dept_No) FROM Dept D
+			INNER JOIN Emp E ON D.Dept_No = E.Dept_No
+			WHERE D.DNombre = @nombreDept
+			GROUP BY D.Dept_No, D.DNombre
+		END
+	ELSE
+		BEGIN
+			PRINT('Nombre de departamento no válido.')
+		END
+	END
+
+EXECUTE NumDepartamentoNombreNumEmpleadoSegunNombre 'Contabilidad' -- Éxito
+EXECUTE NumDepartamentoNombreNumEmpleadoSegunNombre 'Conta' -- Error
+
+-- 11) Crear procedimiento que borre un empleado que coincida con los parámetros indicados (los parámetros serán todos los campos de la tabla empleado).
+CREATE OR ALTER PROCEDURE BorrarEmpleadoSegunParametros @Emp_No INT, @Apellido VARCHAR(50), @Oficio VARCHAR(50), @Dir INT, @Fecha_Alt DATE, @Salario NUMERIC(9,2), @Comision NUMERIC(9,2), @Dept_No INT
+AS
+	BEGIN
+		DELETE FROM Emp
+		WHERE (Emp_No = @Emp_No AND
+		Apellido = @Apellido AND
+		Oficio = @Oficio AND
+		Dir = @Dir AND
+		Fecha_Alt = @Fecha_Alt AND
+		Salario = @Salario AND
+		Comision = @Comision AND
+		Dept_No = @Dept_No)
+	END
+
+EXECUTE BorrarEmpleadoSegunParametros 9138, 'LORENTE', 'DIRECTOR', 7782, '1981-11-14', 500000, 100000, 10
+
+-- 12) Modificación del ejercicio anterior, si no se introducen datos correctamente, informar de ello con un mensaje y no realizar la baja:
+-- Si el empleado introducido no existe en la base de datos, deberemos informarlo con un mensaje indicando ‘Empleado no existente en la BD, verifique los datos del señor ‘apellidoIntroducido’.
+-- Si el empleado existe, pero los datos para eliminarlo son incorrectos, informaremos mostrando los datos reales del empleado junto con los datos introducidos por el usuario, para que se vea el fallo.
+CREATE OR ALTER PROCEDURE BorrarEmpleadoSegunParametrosComprobacion @Emp_No INT, @Apellido VARCHAR(50), @Oficio VARCHAR(50), @Dir INT, @Fecha_Alt DATE, @Salario NUMERIC(9,2), @Comision NUMERIC(9,2), @Dept_No INT
+AS
+	BEGIN
+		IF EXISTS (SELECT Emp_No FROM Emp WHERE Emp_No = @Emp_No AND Apellido = @Apellido AND Oficio = @Oficio AND Dir = @Dir AND Fecha_Alt = @Fecha_Alt AND Salario = @Salario AND Comision = @Comision AND Dept_No = @Dept_No)
+			BEGIN
+				DELETE FROM Emp
+				WHERE Emp_No = @Emp_No
+
+				PRINT('El empleado se ha eliminado correctamente.')
+			END
+		ELSE IF (@Emp_No NOT IN (SELECT Emp_No FROM Emp))
+			BEGIN
+				PRINT('Empleado no existente en la BD, verifique los datos del señor.')
+			END
+		ELSE
+			BEGIN
+				SELECT * FROM Emp
+				WHERE Emp_No = @Emp_No
+				PRINT('El empleado existe, pero los datos para eliminarlo son incorrectos')
+			END
+	END
+
+EXECUTE BorrarEmpleadoSegunParametrosComprobacion 7322, 'GARCIA', 'EMPLEADO', 7119, '1982-10-12', 129000, 0, 20 -- Se elimina
+EXECUTE BorrarEmpleadoSegunParametrosComprobacion 9138, 'LORENTE', 'DIRECTOR', 7782, '1981-11-14', 500000, 100000, 10 -- No existe
+EXECUTE BorrarEmpleadoSegunParametrosComprobacion 7119, 'PEPA', 'DIRECTOR', 7782, '1983-11-19', 225000, 39000, 20 -- Existe pero los datos son erróneos
+
+-- 13) Crear un procedimiento para insertar un empleado de la plantilla del Hospital.
+-- Para poder insertar el empleado realizaremos restricciones:
+-- No podrá estar repetido el número de empleado.
+-- Para insertar, lo haremos por el nombre del hospital y por el nombre de sala, si no existe
+-- la sala o el hospital, no insertaremos y lo informaremos.
+-- Para insertar la función de la plantilla deberá estar entre los que hay en la base de datos, al igual que el Turno.
+-- El salario no superará las 500.000 euros.
