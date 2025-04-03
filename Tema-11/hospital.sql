@@ -222,7 +222,7 @@ ELSE
 	END
 GO
 
-EXECUTE crearInforme 's'
+EXECUTE crearInforme 'Enfermera'
 
 -- 10) Crear un procedimiento en el que pasaremos como parámetro el Apellido de un empleado. El procedimiento devolverá los subordinados del empleado escrito, si el empleado no existe en la base de datos, informaremos de ello, si el empleado no tiene subordinados, lo informa remos con un mensaje y mostraremos su jefe. Mostrar el número de empleado, Apellido, Oficio y Departamento de los subordinados.
 CREATE OR ALTER PROCEDURE subordinadosEmpleado @apellido VARCHAR(50) 
