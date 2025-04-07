@@ -99,3 +99,13 @@ BEGIN
 END
 
 SELECT dbo.numeroReves(2385)
+
+-- 7. Crear una función que invierta una palabra pasada por parámetro
+CREATE OR ALTER FUNCTION palabraReves (@palabra VARCHAR(30))
+RETURNS VARCHAR(30)
+AS
+BEGIN
+	RETURN REVERSE(@palabra)
+END
+
+SELECT dbo.palabraReves('náiluJ')
