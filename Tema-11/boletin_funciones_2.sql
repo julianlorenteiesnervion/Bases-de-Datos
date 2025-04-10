@@ -53,10 +53,22 @@ CREATE OR ALTER FUNCTION diasLaborables (@fechaInicio DATE, @fechaFinal DATE)
 RETURNS INT
 AS
 	BEGIN
-		RETURN ((DATEDIFF(DAY, @fechaInicio, @fechaFinal)) / 7) * 5
+		DECLARE @cantidadDias INT = DATEDIFF(DAY, @fechaInicio, @fechaFinal)
+		DECLARE @i INT = 0
+
+		WHILE (@i < @cantidadDias)
+			BEGIN
+				
+				SET @i++
+			END
 	END
 
 SELECT dbo.diasLaborables ('2025-04-01', '2025-04-30')
 
 -- 5. OBTENER TOTAL DE PEDIDOS POR CLIENTE:
 CREATE OR ALTER FUNCTION obtenerPedidosPorCliente (@idCliente INT)
+RETURNS INT
+AS
+	BEGIN
+		select * from Customers
+	END
