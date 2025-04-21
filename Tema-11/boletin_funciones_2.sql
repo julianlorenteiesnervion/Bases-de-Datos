@@ -93,3 +93,40 @@ RETURN
 SELECT * From dbo.detallesPedidosTodosClientes ()
 
 -- 8. OBTENER VENTAS MENSUALES POR CATEGORÍA. Mostrar por cada año y mes, el nombre de la categoría y la cantidad de ventas realizadas.:
+CREATE OR ALTER FUNCTION VentasMensualesPorCategoria ()
+RETURNS TABLE
+AS
+RETURN
+    SELECT 
+        YEAR(o.OrderDate) AS Año,
+        MONTH(o.OrderDate) AS Mes,
+        c.CategoryName AS Categoria,
+        SUM(od.Quantity) AS TotalVentas
+    FROM Orders o
+    JOIN [Order Details] od ON o.OrderID = od.OrderID
+    JOIN Products p ON od.ProductID = p.ProductID
+    JOIN Categories c ON p.CategoryID = c.CategoryID
+    WHERE o.OrderDate IS NOT NULL
+    GROUP BY 
+        YEAR(o.OrderDate),
+        MONTH(o.OrderDate),
+        c.CategoryName
+
+SELECT * FROM dbo.VentasMensualesPorCategoria ()
+
+-- 9. OBTENER RESUMEN SEMANAL DE VENTAS. Queremos mostrar por cada semana, las ventas realizadas.
+CREATE OR ALTER FUNCTION ResumenSemanalVentas ()
+RETURNS TABLE
+AS
+RETURN SELECT DATEPART(WEEK, OrderDate) AS 'Semana', COUNT(OrderID) AS 'Ventas' FROM Orders
+	GROUP BY DATEPART(WEEK, OrderDate)
+
+SELECT * FROM dbo.ResumenSemanalVentas ()
+
+-- 10. OBTENER LOS 10 PRODUCTOS MÁS VENDIDOS:
+CREATE OR ALTER FUNCTION DiezProductosMasVendidos()
+RETURNS TABLE
+AS
+RETURN SELECT TOP 10 ProductID FROM [Order Details] GROUP BY ProductID ORDER BY SUM(Quantity)
+
+SELECT * FROM dbo.DiezProductosMasVendidos ()
