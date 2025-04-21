@@ -53,22 +53,28 @@ CREATE OR ALTER FUNCTION diasLaborables (@fechaInicio DATE, @fechaFinal DATE)
 RETURNS INT
 AS
 	BEGIN
-		DECLARE @cantidadDias INT = DATEDIFF(DAY, @fechaInicio, @fechaFinal)
-		DECLARE @i INT = 0
-
-		WHILE (@i < @cantidadDias)
-			BEGIN
-				
-				SET @i++
-			END
+		RETURN ((DATEDIFF(DAY, @fechaInicio, @fechaFinal)) / 7) * 5
 	END
 
 SELECT dbo.diasLaborables ('2025-04-01', '2025-04-30')
 
 -- 5. OBTENER TOTAL DE PEDIDOS POR CLIENTE:
-CREATE OR ALTER FUNCTION obtenerPedidosPorCliente (@idCliente INT)
+CREATE OR ALTER FUNCTION obtenerPedidosPorCliente (@idCliente NCHAR(5))
 RETURNS INT
 AS
 	BEGIN
-		select * from Customers
+		RETURN (SELECT COUNT(CustomerID) FROM Orders
+		WHERE CustomerID = @idCliente)
 	END
+
+SELECT dbo.obtenerPedidosPorCliente ('VINET')
+
+-- 6. Función que calcule el promedio de una serie de valores. Los parámetros de la función se pasarán de forma ‘1,2,3,4….’:
+CREATE OR ALTER FUNCTION promedioSerieValores (@valores VARCHAR(300))
+RETURNS DECIMAL(18, 2)
+AS
+	BEGIN
+		RETURN (SELECT AVG(CAST(VALUE AS DECIMAL(18, 2))) FROM STRING_SPLIT(@valores, ','))
+	END
+
+SELECT dbo.promedioSerieValores ('1,2,3,4')
