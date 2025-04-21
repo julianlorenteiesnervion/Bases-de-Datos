@@ -78,3 +78,18 @@ AS
 	END
 
 SELECT dbo.promedioSerieValores ('1,2,3,4')
+
+-- 7. OBTENER LOS DETALLES DE PEDIDOS DE  TODOS LOS CLIENTES. Obtener el identificador de la orden, el nombre del producto, la cantidad pedida y el nombre de la compañçia.:
+CREATE OR ALTER FUNCTION detallesPedidosTodosClientes()
+RETURNS TABLE
+AS
+RETURN
+		SELECT o.OrderID, p.ProductName, od.Quantity, c.CompanyName
+		FROM Orders o
+		JOIN [Order Details] od ON o.OrderID = od.OrderID
+		JOIN Products p ON od.ProductID = p.ProductID
+		JOIN Customers c ON o.CustomerID = c.CustomerID
+
+SELECT * From dbo.detallesPedidosTodosClientes ()
+
+-- 8. OBTENER VENTAS MENSUALES POR CATEGORÍA. Mostrar por cada año y mes, el nombre de la categoría y la cantidad de ventas realizadas.:
