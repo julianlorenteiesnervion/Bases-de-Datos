@@ -56,4 +56,5 @@ AS
 
 -- CREATE OR ALTER FUNCTION CalcularPremiosApuestas ()
 
--- 
+-- 5. Crea una función FnPalmares que reciba un ID de caballo y un rango de fechas y nos devuelva el palmarés de ese caballo en ese intervalo de tiempo. El palmarés es el número de victorias, segundos puestos, etc. Se devolverá una tabla con dos columnas: Posición y NumVeces, que indicarán, respectivamente, cada una de las posiciones y las veces que el caballo ha obtenido ese resultado.
+CREATE OR ALTER FUNCTION FnPalmares (@idCaballo SMALLINT, @fechaInicio DATE, @fechaFinal DATE)
