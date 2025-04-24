@@ -58,3 +58,21 @@ AS
 
 -- 5. Crea una función FnPalmares que reciba un ID de caballo y un rango de fechas y nos devuelva el palmarés de ese caballo en ese intervalo de tiempo. El palmarés es el número de victorias, segundos puestos, etc. Se devolverá una tabla con dos columnas: Posición y NumVeces, que indicarán, respectivamente, cada una de las posiciones y las veces que el caballo ha obtenido ese resultado.
 CREATE OR ALTER FUNCTION FnPalmares (@idCaballo SMALLINT, @fechaInicio DATE, @fechaFinal DATE)
+RETURNS TABLE
+AS RETURN SELECT CC.Posicion, COUNT(CC.IDCaballo) 'Veces' FROM LTCaballosCarreras CC
+		INNER JOIN LTCarreras C ON CC.IDCarrera = C.ID
+		WHERE CC.IDCaballo = @idCaballo AND C.Fecha BETWEEN @fechaInicio AND @fechaFinal
+		GROUP BY CC.Posicion
+
+SELECT * FROM dbo.FnPalmares (1, '2018-01-01', '2018-03-10')
+
+-- 6. Crea una función FnCarrerasHipodromo que nos devuelva las carreras celebradas en un hipódromo en un rango de fechas. La función recibirá como parámetros el nombre del hipódromo y la fecha de inicio y fin del intervalo y nos devolverá una tabla con las siguientes columnas: Fecha de la carrera, número de orden, numero de apuestas realizadas, número de caballos inscritos, número de caballos que la finalizaron y nombre del ganador.
+CREATE OR ALTER FUNCTION FnCarrerasHipodromo (@hipodromo VARCHAR(30), @fechaInicio DATE, @fechaFinal DATE)
+RETURNS TABLE
+AS RETURN SELECT C.Fecha, C.NumOrden, COUNT() FROM LTCarreras C
+	INNER JOIN LTApuestas A ON C.ID = A.IDCarrera
+	INNER JOIN LTCaballosCarreras CC ON C.ID = CC.IDCarrera
+
+SELECT * FROM LTCarreras
+SELECT * FROM LTApuestas
+SELECT * FROM LTCaballosCarreras
