@@ -17,10 +17,10 @@ CREATE OR ALTER FUNCTION FnTotalApostadoCC (@idCaballo SMALLINT, @idCarrera SMAL
 RETURNS SMALLMONEY
 AS
 	BEGIN
-		RETURN (SELECT Importe FROM LTApuestas WHERE @idCaballo = IDCaballo AND @idCarrera = IDCarrera)
+		RETURN (SELECT SUM(Importe) FROM LTApuestas WHERE @idCaballo = IDCaballo AND @idCarrera = IDCarrera)
 	END
 
-SELECT dbo.FnTotalApostadoCC (4, 2)
+SELECT dbo.FnTotalApostadoCC (1, 1)
 
 -- 3. Crea una función escalar llamada FnPremioConseguido que reciba como parámetros el ID de una apuesta y nos devuelva el dinero que ha ganado dicha apuesta. Para obtener el dinero conseguido se tendrá que mirar en qué posición ha quedado el caballo en la apuesta pasada por parámetro sabiendo que si ha quedado el primero el premio será el importe apostado por el campo premio1; si ha quedado en segunda posición el premio será el importe apostado por el campo premio 2, y si ha quedado en otra posición el premio será 0. Si no encontramos la apuesta pasada por parámetro devolverá un NULL.
 CREATE FUNCTION dbo.FnPremioConseguido (@IDApuesta INT)
@@ -38,7 +38,7 @@ BEGIN
     FROM LTApuestas A
     INNER JOIN LTCaballosCarreras CC
         ON A.IDCaballo = CC.IDCaballo AND A.IDCarrera = CC.IDCarrera
-    WHERE A.ID = @IDApuesta;
+    WHERE A.ID = @IDApuesta
 
     RETURN @Premio
 END
